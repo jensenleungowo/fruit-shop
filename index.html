@@ -159,7 +159,7 @@
     .cart-panel {
       position: fixed;
       top: 0; right: 0;
-      width: 380px;
+      width: 420px;
       max-width: 100vw;
       height: 100vh;
       background: white;
@@ -169,6 +169,8 @@
       overflow-y: auto;
       transform: translateX(100%);
       transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
     }
     .cart-panel.open {
       transform: translateX(0);
@@ -179,6 +181,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
     }
     .cart-panel h2 button {
       background: none;
@@ -186,6 +189,11 @@
       font-size: 1.5rem;
       cursor: pointer;
       color: #78716c;
+    }
+    .cart-items-scroll {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 0.5rem;
     }
     .cart-item {
       display: flex;
@@ -228,14 +236,24 @@
     .cart-item-qty button:hover {
       background: #e7e5e4;
     }
-    .cart-total {
-      margin-top: 1.5rem;
-      padding-top: 1rem;
+    .cart-footer {
+      flex-shrink: 0;
       border-top: 2px solid #f5f5f4;
+      padding-top: 1rem;
+    }
+    .cart-total {
       font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .min-order-warn {
+      font-size: 0.8rem;
+      color: #dc2626;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      display: none;
     }
     .checkout-btn {
       width: 100%;
@@ -246,12 +264,189 @@
       border-radius: 30px;
       font-size: 1.1rem;
       font-weight: 700;
-      margin-top: 1rem;
       cursor: pointer;
       transition: background 0.2s;
     }
     .checkout-btn:hover {
       background: #ea580c;
+    }
+    .checkout-btn:disabled {
+      background: #d6d3d1;
+      cursor: not-allowed;
+    }
+
+    /* Checkout Modal */
+    .checkout-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+    .checkout-overlay.open {
+      display: flex;
+    }
+    .checkout-modal {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .checkout-modal h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .checkout-modal h2 span {
+      display: block;
+      font-size: 0.85rem;
+      color: #78716c;
+      font-weight: 400;
+      margin-top: 0.3rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      color: #444;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border: 2px solid #e7e5e4;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #f97316;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    /* Payment Method */
+    .payment-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .payment-method {
+      border: 2px solid #e7e5e4;
+      border-radius: 12px;
+      padding: 0.8rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .payment-method:hover {
+      border-color: #fb923c;
+    }
+    .payment-method.selected {
+      border-color: #f97316;
+      background: #fff7ed;
+    }
+    .payment-method .pm-emoji {
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .payment-method .pm-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Payment details shown after method selection */
+    .payment-details {
+      background: #fff7ed;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: none;
+      text-align: center;
+    }
+    .payment-details.show {
+      display: block;
+    }
+    .payment-details .pd-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+    .payment-details .pd-info {
+      font-size: 1rem;
+      color: #c2410c;
+      font-weight: 600;
+    }
+    .payment-details .pd-hint {
+      font-size: 0.8rem;
+      color: #78716c;
+      margin-top: 0.3rem;
+    }
+    .payment-details .pd-copy {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-top: 0.4rem;
+    }
+
+    .order-summary {
+      background: #fafaf9;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .order-summary h3 {
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: #444;
+    }
+    .order-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      padding: 0.2rem 0;
+    }
+    .order-line.total {
+      font-weight: 700;
+      font-size: 1rem;
+      border-top: 1px solid #e7e5e4;
+      padding-top: 0.5rem;
+      margin-top: 0.3rem;
+    }
+    .place-order-btn {
+      width: 100%;
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 0.9rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .place-order-btn:hover {
+      background: #15803d;
     }
 
     /* Footer */
@@ -275,11 +470,20 @@
       font-weight: 600;
       opacity: 0;
       transition: opacity 0.3s;
-      z-index: 2000;
+      z-index: 3000;
       pointer-events: none;
     }
     .toast.show {
       opacity: 1;
+    }
+
+    @media (max-width: 480px) {
+      .payment-methods {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .checkout-modal {
+        padding: 1.2rem;
+      }
     }
   </style>
 </head>
@@ -305,19 +509,77 @@
   © 2026 鮮果店 | 鮮甜每一天 🍎🍊🍇
 </footer>
 
-<!-- Cart -->
+<!-- Cart Panel -->
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
 <div class="cart-panel" id="cartPanel">
   <h2>
     🛒 購物車
     <button onclick="toggleCart()">✕</button>
   </h2>
-  <div id="cartItems"></div>
-  <div class="cart-total">
-    <span>總計</span>
-    <span id="cartTotal">HK$0</span>
+  <div class="cart-items-scroll" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>總計</span>
+      <span id="cartTotal">HK$0</span>
+    </div>
+    <div class="min-order-warn" id="minOrderWarn">⚠️ 最低消費 HK$50</div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="openCheckout()">結帳</button>
   </div>
-  <button class="checkout-btn" onclick="checkout()">結帳</button>
+</div>
+
+<!-- Checkout Modal -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-modal">
+    <h2>
+      確認訂單
+      <span>請填寫以下資料</span>
+    </h2>
+
+    <div class="form-group">
+      <label>👤 姓名</label>
+      <input type="text" id="custName" placeholder="例如：陳大文" />
+    </div>
+    <div class="form-group">
+      <label>📱 電話</label>
+      <input type="tel" id="custPhone" placeholder="香港手機號碼" />
+    </div>
+    <div class="form-group">
+      <label>📍 送貨地址</label>
+      <textarea id="custAddress" placeholder="例如：九龍旺角西洋菜南街1號 10/F"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>💳 付款方式</label>
+      <div class="payment-methods">
+        <div class="payment-method" data-method="fps" onclick="selectPayment('fps')">
+          <span class="pm-emoji">🏦</span>
+          <span class="pm-label">FPS</span>
+        </div>
+        <div class="payment-method" data-method="payme" onclick="selectPayment('payme')">
+          <span class="pm-emoji">📱</span>
+          <span class="pm-label">PayMe</span>
+        </div>
+        <div class="payment-method" data-method="cash" onclick="selectPayment('cash')">
+          <span class="pm-emoji">💵</span>
+          <span class="pm-label">現金</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="payment-details" id="paymentDetails">
+      <div class="pd-title" id="pdTitle"></div>
+      <div class="pd-info" id="pdInfo"></div>
+      <div class="pd-hint" id="pdHint"></div>
+      <button class="pd-copy" id="pdCopyBtn" onclick="copyPaymentInfo()">📋 複製</button>
+    </div>
+
+    <div class="order-summary">
+      <h3>📋 訂單內容</h3>
+      <div id="orderSummaryLines"></div>
+    </div>
+
+    <button class="place-order-btn" onclick="placeOrder()">✅ 確認落單</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -338,7 +600,28 @@
     { id: 12, name: '西瓜', emoji: '🍉', origin: '🇨🇳 中國寧夏', price: 55, unit: '個' },
   ];
 
+  const MIN_ORDER = 50;
   let cart = {};
+  let selectedPayment = null;
+
+  // --- Config: Fill in your payment details here ---
+  const PAYMENT_CONFIG = {
+    fps: {
+      title: '轉數快 FPS',
+      info: 'FPS ID: 12345678',
+      hint: '請轉賬後保留截圖'
+    },
+    payme: {
+      title: 'PayMe',
+      info: 'PayMe 電話: 98765432',
+      hint: '掃描 QR Code 或付款到以上電話'
+    },
+    cash: {
+      title: '現金',
+      info: '到付現金',
+      hint: '請準備好零錢'
+    }
+  };
 
   function renderProducts() {
     const grid = document.getElementById('productGrid');
@@ -368,8 +651,19 @@
     updateCartUI();
   }
 
+  function getCartTotal() {
+    return Object.entries(cart).reduce((sum, [id, qty]) => {
+      const p = products.find(x => x.id === Number(id));
+      return sum + p.price * qty;
+    }, 0);
+  }
+
+  function getCartCount() {
+    return Object.values(cart).reduce((a, b) => a + b, 0);
+  }
+
   function updateCartUI() {
-    const count = Object.values(cart).reduce((a, b) => a + b, 0);
+    const count = getCartCount();
     document.getElementById('cartCount').textContent = count;
 
     const itemsDiv = document.getElementById('cartItems');
@@ -397,11 +691,18 @@
       }).join('');
     }
 
-    const total = Object.entries(cart).reduce((sum, [id, qty]) => {
-      const p = products.find(x => x.id === Number(id));
-      return sum + p.price * qty;
-    }, 0);
+    const total = getCartTotal();
     document.getElementById('cartTotal').textContent = `HK$${total}`;
+
+    const warn = document.getElementById('minOrderWarn');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    if (count > 0 && total < MIN_ORDER) {
+      warn.style.display = 'block';
+      checkoutBtn.disabled = true;
+    } else {
+      warn.style.display = 'none';
+      checkoutBtn.disabled = false;
+    }
   }
 
   function toggleCart() {
@@ -409,21 +710,105 @@
     document.getElementById('cartPanel').classList.toggle('open');
   }
 
-  function checkout() {
-    const count = Object.values(cart).reduce((a, b) => a + b, 0);
-    if (count === 0) {
-      showToast('⚠️ 購物車是空的，睇下有冇心水生果先～');
+  function openCheckout() {
+    const total = getCartTotal();
+    if (getCartCount() === 0) {
+      showToast('⚠️ 購物車是空的');
       return;
     }
-    const total = document.getElementById('cartTotal').textContent;
+    if (total < MIN_ORDER) {
+      showToast(`⚠️ 最低消費 HK$${MIN_ORDER}`);
+      return;
+    }
+
+    // Reset form
+    document.getElementById('custName').value = '';
+    document.getElementById('custPhone').value = '';
+    document.getElementById('custAddress').value = '';
+    selectedPayment = null;
+    document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+    document.getElementById('paymentDetails').classList.remove('show');
+
+    // Fill order summary
+    const linesDiv = document.getElementById('orderSummaryLines');
+    linesDiv.innerHTML = Object.entries(cart).map(([id, qty]) => {
+      const p = products.find(x => x.id === Number(id));
+      const subtotal = p.price * qty;
+      return `<div class="order-line"><span>${p.emoji} ${p.name} × ${qty}</span><span>HK$${subtotal}</span></div>`;
+    }).join('');
+    linesDiv.innerHTML += `<div class="order-line total"><span>總計</span><span>HK$${total}</span></div>`;
+
+    toggleCart();
+    document.getElementById('checkoutOverlay').classList.add('open');
+  }
+
+  function selectPayment(method) {
+    selectedPayment = method;
+    document.querySelectorAll('.payment-method').forEach(el => {
+      el.classList.toggle('selected', el.dataset.method === method);
+    });
+
+    const cfg = PAYMENT_CONFIG[method];
+    document.getElementById('pdTitle').textContent = cfg.title;
+    document.getElementById('pdInfo').textContent = cfg.info;
+    document.getElementById('pdHint').textContent = cfg.hint;
+    document.getElementById('paymentDetails').classList.add('show');
+  }
+
+  function copyPaymentInfo() {
+    if (!selectedPayment) return;
+    const cfg = PAYMENT_CONFIG[selectedPayment];
+    const text = `${cfg.title}\n${cfg.info}\n${cfg.hint}`;
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('📋 已複製付款資料');
+    }).catch(() => {
+      showToast('📋 ' + text);
+    });
+  }
+
+  function placeOrder() {
+    const name = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
+
+    if (!name) { showToast('⚠️ 請填寫姓名'); return; }
+    if (!phone) { showToast('⚠️ 請填寫電話'); return; }
+    if (!address) { showToast('⚠️ 請填寫送貨地址'); return; }
+    if (!selectedPayment) { showToast('⚠️ 請選擇付款方式'); return; }
+
+    const total = getCartTotal();
+    const payCfg = PAYMENT_CONFIG[selectedPayment];
+
     const items = Object.entries(cart).map(([id, qty]) => {
       const p = products.find(x => x.id === Number(id));
-      return `${p.name} × ${qty}`;
+      return `${p.emoji} ${p.name} × ${qty}`;
     }).join('\n');
-    const msg = encodeURIComponent(`🛒 新訂單\n\n${items}\n\n總計：${total}\n\n多謝幫襯鮮果店！`);
-    toggleCart();
-    showToast(`✅ 多謝！訂單已送出，總計 ${total}`);
-    // In production you'd send this to a backend
+
+    const msg = encodeURIComponent(
+`🛒 新訂單
+
+👤 姓名：${name}
+📱 電話：${phone}
+📍 地址：${address}
+
+📋 商品：
+${items}
+
+💰 總計：HK$${total}
+💳 付款：${payCfg.title}
+${payCfg.info}
+
+多謝幫襯鮮果店！🍑`
+    );
+
+    document.getElementById('checkoutOverlay').classList.remove('open');
+    showToast(`✅ 多謝 ${name}！訂單已送出`);
+
+    // Clear cart
+    cart = {};
+    updateCartUI();
+
+    // Open WhatsApp with full order details
     setTimeout(() => window.open(`https://wa.me/?text=${msg}`, '_blank'), 500);
   }
 
